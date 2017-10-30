@@ -12,11 +12,8 @@ var map,
 var files;
 // TODO: Pull the latitude and longitude from the marker
 function show(i) {
-  var file = files[i];
-  reader.onloadend = function (event) {
-    window.open(event.target.result,'_blank');    
-  };
-  reader.readAsDataURL(file); //read original file
+  var file = files[i];  
+  window.open(URL.createObjectURL(file));    
 }
 /**
  * Add a marker to the Google Map
