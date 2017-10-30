@@ -26,7 +26,7 @@ function show(i) {
  */
 function addInfoWindow(marker, i, name, thumbnail_data, width, height, lat, lon) {
   var infoWindow = new google.maps.InfoWindow({
-    content: '<img onclick="show('+i+')" class="info_window" style="width:' +
+    content: '<img style="cursor:pointer" onclick="show('+i+')" class="info_window" style="width:' +
               width + 'px; height:' + height + 'px;" src="' + thumbnail_data + '"/>' +
               '<div style="display:inline-block;">Lat: ' + lat + '<br>Lon: ' + lon + '<br>Name: ' + name + '</div>'
   });
