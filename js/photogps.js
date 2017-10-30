@@ -9,9 +9,15 @@ var map,
     img = new Image(), // Image object used to render a thumbnail
     maxWidth = 100, // maximum width of thumbnail image on marker
     maxHeight = 100; // maximum height of thumbnail image on marker
-
+var files;
 // TODO: Pull the latitude and longitude from the marker
-
+function show(i) {
+  var file = files[i];
+  reader.onloadend = function (event) {
+    window.open(event.target.result,'_blank');    
+  };
+  reader.readAsDataURL(file); //read original file
+}
 /**
  * Add a marker to the Google Map
  * @param {[type]} marker         The Marker to add
@@ -21,9 +27,9 @@ var map,
  * @param {[type]} lat            latitude of marker
  * @param {[type]} lon            longitude of marker
  */
-function addInfoWindow(marker, name, thumbnail_data, width, height, lat, lon) {
+function addInfoWindow(marker, i, name, thumbnail_data, width, height, lat, lon) {
   var infoWindow = new google.maps.InfoWindow({
-    content: '<img class="info_window" style="width:' +
+    content: '<img onclick="show('+i+')" class="info_window" style="width:' +
               width + 'px; height:' + height + 'px;" src="' + thumbnail_data + '"/>' +
               '<div style="display:inline-block;">Lat: ' + lat + '<br>Lon: ' + lon + '<br>Name: ' + name + '</div>'
   });
@@ -62,7 +68,7 @@ function updateStatus() {
 // Handle each file that was dropped (you can drop multiple at once)
 function drop(e) {
   no_bubble(e);
-  var files = e.target.files || e.dataTransfer.files;
+  files = e.target.files || e.dataTransfer.files;
   processing = files.length;
   updateStatus();
   process_file(files, 0, files.length);
@@ -141,7 +147,7 @@ function process_file(files, i, n) {
 
       if(exif_data.thumbnail) {
         // yay! thumbnail found!
-        addInfoWindow(marker, file.name, exif_data.thumbnail, imageWidth, imageHeight, lat_deg, lon_deg);
+        addInfoWindow(marker, i, file.name, exif_data.thumbnail, imageWidth, imageHeight, lat_deg, lon_deg);
         done++;
         updateStatus();
         process_file(files, i+1, n); // process next file
@@ -160,7 +166,7 @@ function process_file(files, i, n) {
             // redraw smaller
             ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
             var thumbnail_data = canvas.toDataURL("image/jpeg");
-            addInfoWindow(marker, file.name, thumbnail_data, imageWidth, imageHeight, lat_deg, lon_deg);
+            addInfoWindow(marker, i, file.name, thumbnail_data, imageWidth, imageHeight, lat_deg, lon_deg);
 
             done++;
             updateStatus();
