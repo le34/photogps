@@ -21,11 +21,11 @@ var map,
  * @param {[type]} lat            latitude of marker
  * @param {[type]} lon            longitude of marker
  */
-function addInfoWindow(marker, thumbnail_data, width, height, lat, lon) {
+function addInfoWindow(marker, name, thumbnail_data, width, height, lat, lon) {
   var infoWindow = new google.maps.InfoWindow({
     content: '<img class="info_window" style="width:' +
               width + 'px; height:' + height + 'px;" src="' + thumbnail_data + '"/>' +
-              '<div style="display:inline-block;">Lat: ' + lat + '<br>Lon: ' + lon + '</div>'
+              '<div style="display:inline-block;">Lat: ' + lat + '<br>Lon: ' + lon + '<br>Name: ' + name + '</div>'
   });
 
   google.maps.event.addListener(marker, 'click', function () {
@@ -141,7 +141,7 @@ function process_file(files, i, n) {
 
       if(exif_data.thumbnail) {
         // yay! thumbnail found!
-        addInfoWindow(marker, exif_data.thumbnail, imageWidth, imageHeight, lat_deg, lon_deg);
+        addInfoWindow(marker, file.name, exif_data.thumbnail, imageWidth, imageHeight, lat_deg, lon_deg);
         done++;
         updateStatus();
         process_file(files, i+1, n); // process next file
@@ -160,7 +160,7 @@ function process_file(files, i, n) {
             // redraw smaller
             ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
             var thumbnail_data = canvas.toDataURL("image/jpeg");
-            addInfoWindow(marker, thumbnail_data, imageWidth, imageHeight, lat_deg, lon_deg);
+            addInfoWindow(marker, file.name, thumbnail_data, imageWidth, imageHeight, lat_deg, lon_deg);
 
             done++;
             updateStatus();
