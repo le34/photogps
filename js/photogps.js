@@ -1,6 +1,7 @@
 var map,
-    log,
-    stat_div,
+    dropbox = document.getElementById('map-canvas'),
+    log = document.getElementById('log'),
+    stat_div = document.getElementById('status'),
     curr_info, // current information dialog open
     done = 0, // done processing the current set of files?
     processing = 0, // how many images have been processed in this batch
@@ -40,24 +41,14 @@ function addInfoWindow(marker, i, name, thumbnail_data, width, height, lat, lon)
 /**
  * Initialize the Google Map
  */
-function initMap() {
+function initialize() {
   var mapOptions = {
     zoom: 2,
-    center: { lat: 51.985511, lng: 34.628375 },
+    center: new google.maps.LatLng(51.985511, 34.628375),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     scaleControl: true
   };
-  var dropbox = document.getElementById('map-canvas')
-  console.log(dropbox)
-  map = new google.maps.Map(dropbox, mapOptions);
-  log = document.getElementById('log'),
-  stat_div = document.getElementById('status')
-  // do initializations after everything is defined
-dropbox.addEventListener("drop", drop, false);
-dropbox.addEventListener("dragleave", no_bubble, false);
-dropbox.addEventListener("dragexit", no_bubble, false);
-dropbox.addEventListener("dragover", no_bubble, false);
-
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 }
 
 /**
@@ -185,3 +176,10 @@ function process_file(files, i, n) {
   };
 }
 
+// do initializations after everything is defined
+dropbox.addEventListener("drop", drop, false);
+dropbox.addEventListener("dragleave", no_bubble, false);
+dropbox.addEventListener("dragexit", no_bubble, false);
+dropbox.addEventListener("dragover", no_bubble, false);
+
+google.maps.event.addDomListener(window, 'load', initialize);
